@@ -74,13 +74,28 @@ function render() {
   });
 }
 
-addBtn.addEventListener("click", () => {
+// addBtn.addEventListener("click", () => {
+//   const text = todoInput.value.trim();
+//   if (text === "") return;
+
+//   addTodo(text);
+//   todoInput.value = "";
+//   render();
+// });
+
+function handleAdd() {
   const text = todoInput.value.trim();
   if (text === "") return;
 
   addTodo(text);
   todoInput.value = "";
   render();
+}
+
+addBtn.addEventListener("click", handleAdd);
+todoInput.addEventListener("keydown", (e) => {
+  //keydown, merupakan event saat sebuah tombol keyboard di klik.
+  if (e.key === "Enter") handleAdd();
 });
 
 // tampilkan data ketika halaman dibuka
