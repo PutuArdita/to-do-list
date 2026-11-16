@@ -4,21 +4,30 @@
 //3. Hapus to-do
 //4. Lihat daftar to-do
 
-//variabel
-let todos = []; //array kosong untuk menyimpan semua todo
-let nextId = 1; //untuk menghitung Id unik, akan terus bertambah jika ada todo baru
+//variabel dengan localstorage agar data tidak hilang saat refresh.
+let todos = JSON.parse(localStorage.getItem("todos")) || []; //array kosong untuk menyimpan semua todo
+let nextId = JSON.parse(localStorage.getItem("nextId")) || 1; //untuk menghitung Id unik, akan terus bertambah jika ada todo baru
+
+// fungsi untuk menyimpan
+function saveTodos() {
+  localStorage.setItem("todos", JSON.stringify(todos));
+  localStorage.setItem("nextId", JSON.stringify(nextId));
+}
 
 function addTodo(text) {
   todos.push({ id: nextId++, text: text, completed: false });
+  saveTodos();
 }
 
 function toggleTodo(id) {
   const todo = todos.find((t) => t.id === id);
-  if (todo) todo.completed = !todo.completed;
+  if (todo) todo.completed = !todo.completed; //! membalik nilai boolean
+  saveTodos();
 }
 
 function deleteTodo(id) {
   todos = todos.filter((t) => t.id !== id);
+  saveTodos();
 }
 
 function showTodo() {
@@ -34,9 +43,10 @@ const todoList = document.getElementById("todoList");
 // console.log(todoInput, addBtn, todoList);
 
 function render() {
-  todoList.innerHTML = "";
+  todoList.innerHTML = ""; //mengosongkan daftar
   todos.forEach((t) => {
-    const li = document.createElement("li");
+    //perulangan data, arrow function dengan t sebagai parameter.
+    const li = document.createElement("li"); //membuat list
 
     const span = document.createElement("span");
     span.textContent = t.text;
@@ -44,7 +54,7 @@ function render() {
 
     const toggleBtn = document.createElement("button");
     toggleBtn.type = "button";
-    toggleBtn.textContent = t.completed ? "Batal" : "Selesai";
+    toggleBtn.textContent = t.completed ? "Batal" : "Selesai"; //ternary operator, untuk mengecek true atau false.
     toggleBtn.addEventListener("click", () => {
       toggleTodo(t.id);
       render();
@@ -57,7 +67,7 @@ function render() {
       deleteTodo(t.id);
       render();
     });
-    li.appendChild(span);
+    li.appendChild(span); //appendChild merupakan method DOM.
     li.appendChild(toggleBtn);
     li.appendChild(btnDelete);
     todoList.appendChild(li);
@@ -73,6 +83,8 @@ addBtn.addEventListener("click", () => {
   render();
 });
 
+// tampilkan data ketika halaman dibuka
+render();
 // addTodo("Belajar Js");
 // addTodo("Belajar Bahasa ");
 // addTodo("Add Product List ");
