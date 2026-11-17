@@ -1,107 +1,55 @@
-//Fitur to-do list
-//1. Tambah to-do
-//2. Tandai selesai atau belum selesai
-//3. Hapus to-do
-//4. Lihat daftar to-do
+// list file
+// data and localstorage
+let lists = JSON.parse(localStorage.getItem("lists")) || [];
+let nextListId = JSON.parse(localStorage.getItem("nextListId")) || 1;
+let nextTodoId = JSON.parse(localStorage.getItem("nextTodoId")) || 1;
 
-//variabel dengan localstorage agar data tidak hilang saat refresh.
-let todos = JSON.parse(localStorage.getItem("todos")) || []; //array kosong untuk menyimpan semua todo
-let nextId = JSON.parse(localStorage.getItem("nextId")) || 1; //untuk menghitung Id unik, akan terus bertambah jika ada todo baru
-
-// fungsi untuk menyimpan
-function saveTodos() {
-  localStorage.setItem("todos", JSON.stringify(todos));
-  localStorage.setItem("nextId", JSON.stringify(nextId));
+function saveLists() {
+  localStorage.setItem("lists", JSON.stringify(lists));
+  localStorage.setItem("nextListId", JSON.stringify(nextListId));
+  localStorage.setItem("nextTodoId", JSON.stringify(nextTodoId));
 }
 
-function addTodo(text) {
-  todos.push({ id: nextId++, text: text, completed: false });
-  saveTodos();
+// FUNCTION LIST
+function addList(title) {
+  lists.push({ id: nextListId++, title: title, todos: [] });
+  saveLists();
 }
 
-function toggleTodo(id) {
-  const todo = todos.find((t) => t.id === id);
-  if (todo) todo.completed = !todo.completed; //! membalik nilai boolean
-  saveTodos();
+function deleteList(listId) {
+  lists = lists.filter((l) => l.id !== listId);
+  saveLists();
 }
 
-function deleteTodo(id) {
-  todos = todos.filter((t) => t.id !== id);
-  saveTodos();
+// function showLists() {
+//   lists.forEach((l) => {
+//     console.log(`${l.id}. ${l.title} (${l.todos.length} todo)`);
+//   });
+// }
+
+// FUNCTION TODO
+function addTodo(listId, text) {
+  const list = lists.find((l) => l.id === listId);
+  if (list) list.todos.push({ id: nextTodoId++, text: text, completed: false });
+  saveLists();
 }
 
-function showTodo() {
-  todos.forEach((t) => {
-    console.log(`${t.id}. [${t.completed ? "X" : " "}] ${t.text}`);
-  });
+function toggleTodo(listId, todoId) {
+  const list = lists.find((l) => l.id === listId);
+  if (!list) return;
+
+  const todo = list.todos.find((t) => t.id === todoId);
+  if (todo) todo.completed = !todo.completed;
+  saveLists();
 }
 
-const todoInput = document.getElementById("todoInput");
-const addBtn = document.getElementById("addBtn");
-const todoList = document.getElementById("todoList");
-
-// console.log(todoInput, addBtn, todoList);
-
-function render() {
-  todoList.innerHTML = ""; //mengosongkan daftar
-  todos.forEach((t) => {
-    //perulangan data, arrow function dengan t sebagai parameter.
-    const li = document.createElement("li"); //membuat list
-
-    const span = document.createElement("span");
-    span.textContent = t.text;
-    if (t.completed) span.style.textDecoration = "line-through";
-
-    const toggleBtn = document.createElement("button");
-    toggleBtn.type = "button";
-    toggleBtn.textContent = t.completed ? "Batal" : "Selesai"; //ternary operator, untuk mengecek true atau false.
-    toggleBtn.addEventListener("click", () => {
-      toggleTodo(t.id);
-      render();
-    });
-
-    const btnDelete = document.createElement("button");
-    btnDelete.type = "button";
-    btnDelete.textContent = "Hapus";
-    btnDelete.addEventListener("click", () => {
-      deleteTodo(t.id);
-      render();
-    });
-    li.appendChild(span); //appendChild merupakan method DOM.
-    li.appendChild(toggleBtn);
-    li.appendChild(btnDelete);
-    todoList.appendChild(li);
-  });
+function deleteTodo(listId, todoId) {
+  const list = lists.find((l) => l.id === listId);
+  if (list) list.todos = list.todos.filter((t) => t.id !== todoId);
+  saveLists();
 }
 
-// addBtn.addEventListener("click", () => {
-//   const text = todoInput.value.trim();
-//   if (text === "") return;
-
-//   addTodo(text);
-//   todoInput.value = "";
-//   render();
-// });
-
-function handleAdd() {
-  const text = todoInput.value.trim();
-  if (text === "") return;
-
-  addTodo(text);
-  todoInput.value = "";
-  render();
-}
-
-addBtn.addEventListener("click", handleAdd);
-todoInput.addEventListener("keydown", (e) => {
-  //keydown, merupakan event saat sebuah tombol keyboard di klik.
-  if (e.key === "Enter") handleAdd();
-});
-
-// tampilkan data ketika halaman dibuka
-render();
-// addTodo("Belajar Js");
-// addTodo("Belajar Bahasa ");
-// addTodo("Add Product List ");
-// toggleTodo(2);
-// showTodo();
+// ELEMENT DOM
+const listInput = document.getElementById("listInput");
+const addListBtn = document.getElementById("addListBtn");
+const listContainer = document.getElementById("listContainer");
