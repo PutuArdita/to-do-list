@@ -7,12 +7,17 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>To-Do List</h1>
-    <input type="text" id="listInput" placeholder="Judul Daftar" />
-    <button id="addListBtn">Tambah Daftar</button>
-    <!-- <ul id="todoList"></ul> -->
-    <div id="listContainer"></div>
-    <!--wadah card daftar todo-->
+    <main class="container">
+      <h1>To-Do List</h1>
+
+      <div class="add-list">
+        <input type="text" id="listInput" placeholder="Judul To-Do" />
+        <button type="button" id="addListBtn">Tambah Daftar</button>
+      </div>
+
+      <div id="listContainer"></div>
+    </main>
+
     <script src="project.js"></script>
   </body>
 </html>
