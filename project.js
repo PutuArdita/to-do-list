@@ -73,17 +73,28 @@ listInput.addEventListener("keydown", (e) => {
 function render() {
   listContainer.innerHTML = "";
 
+  // IF LIST NO TODO
+  if (lists.length === 0) {
+    const empty = document.createElement("p");
+    empty.textContent = "Belum ada daftar. Buat daftar pertamamu di atas.";
+    listContainer.appendChild(empty);
+    return;
+  }
+
   // looping
   lists.forEach((list) => {
     const card = document.createElement("div");
+    card.className = "card";
 
     const title = document.createElement("h2");
     title.textContent = list.title;
 
     const deleteListBtn = document.createElement("button");
     deleteListBtn.type = "button";
+    deleteListBtn.className = "btn-danger";
     deleteListBtn.textContent = "Hapus Daftar";
     deleteListBtn.addEventListener("click", () => {
+      if (!confirm(`Hapus daftar "${list.title}" beserta isinya?`)) return;
       deleteList(list.id);
       render();
     });
@@ -111,16 +122,26 @@ function render() {
 
     const ul = document.createElement("ul");
 
+    // EMPTY STATE (To-Do)
+    if (list.todos.length === 0) {
+      const emptyTodo = document.createElement("li");
+      emptyTodo.className = "empty-todo";
+      emptyTodo.textContent = "Belum ada To-Do di daftar ini.";
+      ul.appendChild(emptyTodo);
+    }
     // nested loop (perulangan bersarang)
     list.todos.forEach((t) => {
       const li = document.createElement("li");
+      li.className = "todo-item";
 
       const span = document.createElement("span");
       span.textContent = t.text;
-      if (t.completed) span.style.textDecoration = "line-through";
+      // if (t.completed) span.style.textDecoration = "line-through";
+      if (t.completed) span.classList.add("done");
 
       const toggleBtn = document.createElement("button");
       toggleBtn.type = "button";
+      toggleBtn.className = "btn-toggle";
       toggleBtn.textContent = t.completed ? "Batal" : "Selesai";
       toggleBtn.addEventListener("click", () => {
         toggleTodo(list.id, t.id);
@@ -129,6 +150,7 @@ function render() {
 
       const deleteBtn = document.createElement("button");
       deleteBtn.type = "button";
+      deleteBtn.className = "btn-danger";
       deleteBtn.textContent = "Hapus";
       deleteBtn.addEventListener("click", () => {
         deleteTodo(list.id, t.id);
@@ -141,10 +163,24 @@ function render() {
       ul.appendChild(li);
     });
 
-    card.appendChild(title);
-    card.appendChild(deleteListBtn);
-    card.appendChild(todoInput);
-    card.appendChild(addTodoBtn);
+    // card.appendChild(title);
+    // card.appendChild(deleteListBtn);
+    // card.appendChild(todoInput);
+    // card.appendChild(addTodoBtn);
+    // card.appendChild(ul);
+    // listContainer.appendChild(card);
+    const header = document.createElement("div");
+    header.className = "card-header";
+    header.appendChild(title);
+    header.appendChild(deleteListBtn);
+
+    const addRow = document.createElement("div");
+    addRow.className = "add-row";
+    addRow.appendChild(todoInput);
+    addRow.appendChild(addTodoBtn);
+
+    card.appendChild(header);
+    card.appendChild(addRow);
     card.appendChild(ul);
     listContainer.appendChild(card);
   });
