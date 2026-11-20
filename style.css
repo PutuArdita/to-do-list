@@ -55,6 +55,13 @@ button {
   white-space: nowrap;
 }
 
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
 button:hover {
   opacity: 0.85;
 }
@@ -127,4 +134,18 @@ button:hover {
   background: #fdecec;
   color: var(--danger);
   padding: 6px 10px;
+}
+
+.card-header h2,
+.todo-item span {
+  cursor: text;
+}
+
+.inline-edit {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  font: inherit;
 }
