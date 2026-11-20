@@ -139,11 +139,19 @@ function render() {
       // if (t.completed) span.style.textDecoration = "line-through";
       if (t.completed) span.classList.add("done");
 
-      const toggleBtn = document.createElement("button");
-      toggleBtn.type = "button";
-      toggleBtn.className = "btn-toggle";
-      toggleBtn.textContent = t.completed ? "Batal" : "Selesai";
-      toggleBtn.addEventListener("click", () => {
+      // const toggleBtn = document.createElement("button");
+      // toggleBtn.type = "button";
+      // toggleBtn.className = "btn-toggle";
+      // toggleBtn.textContent = t.completed ? "Batal" : "Selesai";
+      // toggleBtn.addEventListener("click", () => {
+      //   toggleTodo(list.id, t.id);
+      //   render();
+      // });
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = t.completed;
+      checkbox.addEventListener("change", () => {
         toggleTodo(list.id, t.id);
         render();
       });
@@ -157,8 +165,12 @@ function render() {
         render();
       });
 
+      // li.appendChild(span);
+      // li.appendChild(toggleBtn);
+      // li.appendChild(deleteBtn);
+      // ul.appendChild(li);
+      li.appendChild(checkbox);
       li.appendChild(span);
-      li.appendChild(toggleBtn);
       li.appendChild(deleteBtn);
       ul.appendChild(li);
     });

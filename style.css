@@ -111,10 +111,16 @@ button:hover {
   color: var(--muted);
 }
 
-.btn-toggle {
+/* .btn-toggle {
   background: #e8eefc;
   color: var(--primary);
   padding: 6px 10px;
+} */
+.todo-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
 .btn-danger {
